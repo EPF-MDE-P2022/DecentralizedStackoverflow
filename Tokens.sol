@@ -164,24 +164,6 @@ contract T42Token is ERC20Interface, SafeMath {
         return true;
     }
 
-    
-    // ------------------------------------------------------------------------
-    // If the answer has been validated it starts the transfer function
-    // ------------------------------------------------------------------------
-    function Validate_Answer(address to, uint tokens){
-        // Il ne sait ce qu'est validate, de quoi c un parametre
-        if (validated=true) {
-            emit Transfer(from, to, tokens);
-        }
-    }
-    
-    // ------------------------------------------------------------------------
-    // Don't accept ETH
-    // ------------------------------------------------------------------------
-    function () public payable {
-        revert();
-    }
-    
     // ------------------------------------------------------------------------
     // Questions and Answers
     // ------------------------------------------------------------------------
@@ -201,12 +183,32 @@ contract T42Token is ERC20Interface, SafeMath {
         int question_id;
     }
     
-
     Question[] questions; 
     Answer[] answers;
     
     function SendMessage(string question_title, string question_content){
             questions.push(Question(msg.sender,question_title,question_content));
+    }
+    
+    // ------------------------------------------------------------------------
+    // If the answer has been validated it starts the transfer function
+    // ------------------------------------------------------------------------
+    function Validate_Answer(address to, uint tokens){
+        ans = answers[answer.answer_id];
+        que = questions[question.id];
+        require (msg.sender == que.owner);
+
+        if (ans.validate == false) {
+            ans.validate = true;
+            emit Transfer(from, to, tokens);
+        }
+    }
+    
+    // ------------------------------------------------------------------------
+    // Don't accept ETH
+    // ------------------------------------------------------------------------
+    function () public payable {
+        revert();
     }
     
     // ------------------------------------------------------------------------
@@ -219,19 +221,5 @@ contract T42Token is ERC20Interface, SafeMath {
         balances[to] = safeAdd(balances[to], tokens);
         emit Transfer(msg.sender, to, tokens);
         return true;
-    }
-    
-    function ValidateAnswer(Answer answer,Question question){
-        answer = answers[answer.answer_id];
-        question = questions[question.id];
-        require (msg.sender == question.owner);
-        question.validate = true;
-        InitializeTransfer(question);
-    }
-    
-    function InitializeTransfer(Question question){
-        if (question.validate == true){
-           transfer();
-        }
-    } 
+    }     
 }
