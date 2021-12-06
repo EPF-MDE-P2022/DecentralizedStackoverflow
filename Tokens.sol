@@ -226,6 +226,7 @@ contract T42Token is ERC20Interface, SafeMath {
         question = questions[question.id];
         require (msg.sender == question.owner);
         question.validate = true;
+        InitializeTransfer(question);
     }
     
     function InitializeTransfer(Question question){
