@@ -9,9 +9,10 @@ Work:
 For the back-end we managed to create a smart contract that would transfer tokens from 1 user to an other depending on the questions and answers to those
 questions.
 
-Sadly we have no way to test whether this works properly or not
+Sadly we have no way to test whether this works properly or not because we could not link the front and back ends.
 
-            ----------
+
+
 
 For the front end part. We used streamlit with python to build our webpage. To deploy it on the web we also used heroku.
 
